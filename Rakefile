@@ -138,6 +138,7 @@ This.gemspec['ruby'] = Gem::Specification.new do |spec|
   spec.rdoc_options = [ "--main"  , 'README.rdoc', ]
 
   # The Runtime Dependencies
+  spec.add_dependency( 'map', '~> 6.2.0')
 
   # The Development Dependencies
   spec.add_development_dependency( 'rake'     , '~> 0.9.2.2')

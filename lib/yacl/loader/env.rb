@@ -18,7 +18,7 @@ module Yacl
         super()
         @env    = env
         @prefix = prefix
-        load_config( @env, @prefix )
+        @map    = load_config( @env, @prefix )
       end
 
       private
@@ -29,12 +29,14 @@ module Yacl
         dot_env    = convert_to_dotted_keys( env )
         dot_prefix = to_property_path( prefix )
         key_map    = filter_keys( dot_env.keys, dot_prefix )
+        m          = Map.new
 
         key_map.each do |orig_key, filtered_key|
           args = filtered_key.split(".")
           args << dot_env[orig_key]
-          @map.set( *args )
+          m.set( *args )
         end
+        return m
       end
 
       def convert_to_dotted_keys( hash )

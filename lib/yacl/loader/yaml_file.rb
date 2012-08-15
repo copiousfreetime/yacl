@@ -31,7 +31,6 @@ module Yacl
 
         m = Map.new( loaded )
         return scoped( m, scope )
-
       end
 
       def scoped( m, scope )

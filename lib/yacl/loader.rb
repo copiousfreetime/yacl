@@ -15,3 +15,4 @@ module Yacl
 end
 require 'yacl/loader/env'
 require 'yacl/loader/yaml_file'
+require 'yacl/loader/yaml_dir'

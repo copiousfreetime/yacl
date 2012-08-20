@@ -33,7 +33,7 @@ module Yacl
 
         key_map.each do |orig_key, filtered_key|
           args = filtered_key.split(".")
-          args << dot_env[orig_key]
+          args << dot_env[orig_key].to_s
           m.set( *args )
         end
         return m

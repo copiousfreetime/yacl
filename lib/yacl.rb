@@ -4,5 +4,5 @@ module Yacl
   class Error < ::StandardError; end
 end
 require 'yacl/configuration'
-require 'yacl/set_defaults'
+require 'yacl/define/defaults'
 require 'yacl/loader'

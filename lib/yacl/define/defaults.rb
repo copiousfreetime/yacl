@@ -1,9 +1,10 @@
 module Yacl
+  module Define
   # Use SetDefaults to extend a class and allow it to be the encapsulation of
   # hardcoced default configuration parameters
   #
   #   class MyDefaults
-  #     extend Yacl::SetDefaults
+  #     extend Yacl::Define::Defaults
   #
   #     default 'host.name', 'localhost'
   #   end
@@ -15,7 +16,7 @@ module Yacl
   #   d = MyDefaults.new
   #   d.host.name               # => 'localhost'
   #
-  module SetDefaults
+  module Defaults
     class Error< ::Yacl::Error; end
 
     module ClassMethods
@@ -45,6 +46,6 @@ module Yacl
     def self.included( klass )
       klass.extend( ClassMethods )
     end
-
+  end
   end
 end

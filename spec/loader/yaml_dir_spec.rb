@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Yacl::Loader::YamlDir do
   before do
-    @yaml_dir = SpecHelpers.spec_dir( 'data', 'yaml_dir' )
+    @yaml_dir = Yacl::Spec::Helpers.spec_dir( 'data', 'yaml_dir' )
   end
 
   it "returns a config containing properties" do

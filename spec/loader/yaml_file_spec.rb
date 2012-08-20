@@ -8,10 +8,10 @@ b: bar
 _yml_
     @tmpdir    = Dir.mktmpdir
     @yaml_file = File.join( @tmpdir, "ytest.yml" )
-    SpecHelpers.tmpfile_with_contents( @yaml_file, @yaml_contents )
+    Yacl::Spec::Helpers.tmpfile_with_contents( @yaml_file, @yaml_contents )
 
     @scoped_file = File.join( @tmpdir, "yscoped.yml" )
-    SpecHelpers.tmpfile_with_contents( @scoped_file, <<_eob_ )
+    Yacl::Spec::Helpers.tmpfile_with_contents( @scoped_file, <<_eob_ )
 development:
   a: foo
   b: bar
@@ -46,7 +46,7 @@ _eob_
 
   it "raises an error if the file is not a top level hash" do
     bad_file = File.join( @tmpdir, "notahash.yml" )
-    SpecHelpers.tmpfile_with_contents( bad_file, <<_eob_ )
+    Yacl::Spec::Helpers.tmpfile_with_contents( bad_file, <<_eob_ )
 - a: foo
 - b: bar
 _eob_

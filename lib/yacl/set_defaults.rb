@@ -15,17 +15,18 @@ module Yacl
   #   d = MyDefaults.new
   #   d.host.name               # => 'localhost'
   #
-  #
   module SetDefaults
     class Error< ::Yacl::Error; end
 
     module ClassMethods
+
       def __map__
         if not defined? @__map__ then
           @__map__  = Map.new
         end
         return @__map__
       end
+
       def default( name, value )
         args = name.split(".")
         args << value

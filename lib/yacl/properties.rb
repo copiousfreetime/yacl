@@ -38,6 +38,11 @@ module Yacl
     def scopes
       scope_names.to_a.sort
     end
+
+    def has_scope?( scope )
+      scope_names.include?( scope )
+    end
+
     private
 
     def scope_names

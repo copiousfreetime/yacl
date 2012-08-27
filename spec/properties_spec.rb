@@ -20,5 +20,12 @@ describe 'Yacl::Properties' do
   it "can say what its scopes are" do
     @properties.scopes.must_equal %w[ my other ]
   end
+
+  it "can say that it has a given scope" do
+    @properties.has_scope?( 'my' ).must_equal true
+  end
+
+  it "can say that it does not have a scope" do
+    @properties.has_scope?( 'your' ).must_equal false
   end
 end

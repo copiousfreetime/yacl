@@ -21,5 +21,17 @@ module Yacl
         store(k.to_s, v)
       end
     end
+
+    # Return a new Properties that is a subset of the properties with the first
+    # prefix removed.
+    def scoped_by( scope )
+      s_props = Properties.new
+      each do |k,v|
+        if md = k.match( /\A(#{scope})\.(.*)\Z/ ) then
+          s_props.store( md.captures.last, v )
+        end
+      end
+      return s_props
+    end
   end
 end

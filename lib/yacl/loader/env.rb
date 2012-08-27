@@ -31,12 +31,8 @@ module Yacl
       def load_properties( env, prefix )
         dot_env    = convert_to_dotted_keys( env )
         dot_prefix = to_property_path( prefix )
-        key_map    = filter_keys( dot_env.keys, dot_prefix )
-        p          = Properties.new
-
-        key_map.each do |orig_key, filtered_key|
-          p.store( filtered_key, dot_env[orig_key].to_s )
-        end
+        p          = Properties.new( dot_env )
+        p          = p.scoped_by( dot_prefix ) if dot_prefix
         return p
       end
 
@@ -52,20 +48,6 @@ module Yacl
       def to_property_path( name )
         return nil unless name
         name.downcase.gsub('_','.')
-      end
-
-      # return a hash-like filteration of the input hash also normalizing keys
-      # to the dotted notation
-      def filter_keys( keys, prefix )
-        regex    = %r{\A(.*)\Z}
-        regex    = %r{\A#{prefix}\.(.*)\Z} if prefix
-        selected = {}
-        keys.each do |k|
-          if data = regex.match( k ) then
-            selected[k] = data.captures.first
-          end
-        end
-        return selected
       end
     end
   end

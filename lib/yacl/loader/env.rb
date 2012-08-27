@@ -14,29 +14,30 @@ module Yacl
     #   config = Yacl::Loader::Env.new( ENV, 'MY_APP' ).config
     #
     class Env < ::Yacl::Loader
-      def initialize( env = ENV, prefix = nil )
-        super()
-        @env    = env
-        @prefix = prefix
-        @map    = load_config( @env, @prefix )
+      def initialize( opts = {} )
+        super
+        @env    = @options.fetch( :env, ENV )
+        @prefix = @options.fetch( :prefix, nil )
+      end
+
+      def properties
+        load_properties( @env, @prefix )
       end
 
       private
 
       # Given the input hash and a key prefix, load the hash into a the @map
       #
-      def load_config( env, prefix )
+      def load_properties( env, prefix )
         dot_env    = convert_to_dotted_keys( env )
         dot_prefix = to_property_path( prefix )
         key_map    = filter_keys( dot_env.keys, dot_prefix )
-        m          = Map.new
+        p          = Properties.new
 
         key_map.each do |orig_key, filtered_key|
-          args = filtered_key.split(".")
-          args << dot_env[orig_key].to_s
-          m.set( *args )
+          p.store( filtered_key, dot_env[orig_key].to_s )
         end
-        return m
+        return p
       end
 
       def convert_to_dotted_keys( hash )

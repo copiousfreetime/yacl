@@ -20,7 +20,7 @@ production:
   b: wibble
 _eob_
 
-  
+
   end
 
   after do
@@ -28,19 +28,21 @@ _eob_
   end
 
   it "returns a config containing properties" do
-    e = Yacl::Loader::YamlFile.new( @yaml_file )
-    c = e.configuration
-    c.a.must_equal 'foo'
-    c.b.must_equal 'bar'
+    e = Yacl::Loader::YamlFile.new( :file => @yaml_file )
+    p = e.properties
+    p['a'].must_equal 'foo'
+    p.a.must_equal 'foo'
+    p['b'].must_equal 'bar'
+    p.b.must_equal 'bar'
   end
 
   it "raises an error if the file does not exist" do
-    lambda { Yacl::Loader::YamlFile.new( "/does/not/exist" ) }.must_raise Yacl::Loader::YamlFile::Error
+    lambda { Yacl::Loader::YamlFile.new( :file => "/does/not/exist" ).properties }.must_raise Yacl::Loader::YamlFile::Error
   end
 
   it "raises an error if the file is not readable" do
     File.chmod( 0000, @yaml_file )
-    lambda { Yacl::Loader::YamlFile.new( @yaml_file ) }.must_raise Yacl::Loader::YamlFile::Error
+    lambda { Yacl::Loader::YamlFile.new( :file => @yaml_file ).properties }.must_raise Yacl::Loader::YamlFile::Error
     File.chmod( 0400, @yaml_file )
   end
 
@@ -50,18 +52,20 @@ _eob_
 - a: foo
 - b: bar
 _eob_
-    lambda { Yacl::Loader::YamlFile.new( bad_file ) }.must_raise Yacl::Loader::YamlFile::Error
+    lambda { Yacl::Loader::YamlFile.new( :file => bad_file ).properties }.must_raise Yacl::Loader::YamlFile::Error
   end
 
   it "returns a scoped config containing properties" do
-    e = Yacl::Loader::YamlFile.new( @scoped_file, "production" )
-    c = e.configuration
-    c.a.must_equal 'baz'
-    c.b.must_equal 'wibble'
+    e = Yacl::Loader::YamlFile.new( :file => @scoped_file, :scope => "production" )
+    p = e.properties
+    p['a'].must_equal 'baz'
+    p.a.must_equal 'baz'
+    p['b'].must_equal 'wibble'
+    p.b.must_equal 'wibble'
   end
 
   it "raises an error if the scoped config does not contain the scoped key" do
-    lambda { Yacl::Loader::YamlFile.new( @scoped_file, "badscope" ) }.must_raise Yacl::Loader::YamlFile::Error
+    lambda { Yacl::Loader::YamlFile.new( :file => @scoped_file, :scope => "badscope" ).properties }.must_raise Yacl::Loader::YamlFile::Error
   end
 
 end

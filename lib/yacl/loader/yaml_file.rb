@@ -6,17 +6,21 @@ module Yacl
     class YamlFile < ::Yacl::Loader
       class Error < ::Yacl::Loader::Error; end
 
-      def initialize( filename, scope = nil )
-        super()
-        @filename = filename
-        @scope    = scope
-        @map      = YamlFile.validate_and_load_config( @filename, @scope )
+      def initialize( opts = {} )
+        super
+        @filename = options.fetch( :file )
+        @scope    = options.fetch( :scope, nil )
+        YamlFile.validate_file( @filename )
+      end
+
+      def properties
+        YamlFile.validate_and_load_properties( @filename, @scope )
       end
 
       class << self
-        def validate_and_load_config( filename, scope = nil )
+        def validate_and_load_properties( filename, scope = nil )
           validate_file( filename )
-          YamlFile.load_config( filename, scope )
+          YamlFile.load_properties( filename, scope )
         end
 
         # Validate that the give filename is a valid, readable file
@@ -29,18 +33,18 @@ module Yacl
 
         # Given the input filename and a scope, load the yaml file into the @map
         #
-        def load_config( filename, scope )
+        def load_properties( filename, scope )
           loaded = ::YAML.load_file( filename )
           raise Error, "#{filename} does not contain a top level hash" unless loaded.kind_of?( Hash )
 
-          m = Map.new( loaded )
-          return scoped( m, scope, filename )
+          p = Properties.new( loaded )
+          return scoped( p, scope, filename )
         end
 
-        def scoped( m, scope, filename )
-          return m unless scope
-          raise Error, "#{filename} does not contain a top level scope of '#{scope}'. Options are #{m.keys.join(", ")}" unless m.has_key?( scope )
-          m.get( scope )
+        def scoped( p, scope, filename )
+          return p unless scope
+          raise Error, "#{filename} does not contain a top level scope of '#{scope}'. Options are #{p.scopes.join(", ")}" unless p.has_scope?( scope )
+          return p.scoped_by( scope )
         end
       end
     end

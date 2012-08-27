@@ -1,4 +1,5 @@
 require 'forwardable'
+require 'set'
 
 module Yacl
   # Properties is a wrapper around keys and values that are part of a
@@ -32,6 +33,14 @@ module Yacl
         end
       end
       return s_props
+    end
+
+    def scopes
+      s = Set.new
+      keys.each do |k|
+        s << k.split(".").first
+      end
+      s.to_a
     end
   end
 end

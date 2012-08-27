@@ -14,4 +14,9 @@ describe 'Yacl::Properties' do
     s['b'].must_equal 'bar'
     s.has_key?( 'c' ).must_equal false
   end
+
+  it "can say what its scopes are" do
+    p = Yacl::Properties.new(  'my.a' => 'foo', 'my.b' => 'bar', 'other.c' => 'baz' )
+    p.scopes.sort.must_equal %w[ my other ]
+  end
 end

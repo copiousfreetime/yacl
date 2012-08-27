@@ -27,8 +27,9 @@ module Yacl
 
     # Return a new Properties that is a subset of the properties with the first
     # prefix removed.
-    def scoped_by( scope )
-      Properties.new( fetch( scope ) )
+    def scoped_by( *scope )
+      scope = scope.length == 1 ? scope.first : scope
+      Properties.new( @map.get( expand_key( scope ) ) )
     end
 
     def scopes
@@ -42,17 +43,23 @@ module Yacl
     private
 
     def scope_names
-      s = Set.new
-      keys.each do |k|
-        s << k.split(".").first
-      end
-      return s
+      keys.map { |k| k.to_s }
     end
 
     def expanded_keys( hash )
       hash.each do |k,v|
-        yield [k],v unless k =~ /\./
-        yield k.split('.'), v
+        yield expand_key( k ), v
+      end
+    end
+
+    def expand_key( str )
+      case str
+      when Array
+        str
+      when /\./
+        str.split(".")
+      else
+        [ str ]
       end
     end
   end

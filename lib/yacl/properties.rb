@@ -40,7 +40,7 @@ module Yacl
       keys.each do |k|
         s << k.split(".").first
       end
-      s.to_a
+      s.to_a.sort
     end
   end
 end

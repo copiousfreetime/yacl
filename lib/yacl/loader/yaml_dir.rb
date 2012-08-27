@@ -6,35 +6,47 @@ module Yacl
     class YamlDir < ::Yacl::Loader
       class Error < ::Yacl::Loader::Error; end
 
-      def initialize( dirname, scope = nil )
-        super()
-        @dirname  = dirname
-        @scope    = scope
-        validate_dir( @dirname )
-        @map      = load_config( @dirname, @scope )
+      def initialize( options = {} )
+        super
+        @dirname  = options.fetch( :directory )
+        @scope    = options.fetch( :scope, nil )
+        YamlDir.validate_directory( @dirname )
       end
 
-      private
-
-      # Validate that the give dirname is a valid, readable dir
-      #
-      def validate_dir( dirname )
-        raise Error, "#{dirname} does not exist" unless File.exist?( dirname )
-        raise Error, "#{dirname} is not a directory" unless File.directory?( dirname )
+      def properties
+        YamlDir.validate_and_load_properties( @dirname, @scope )
       end
 
-      # Given the input dirname and a scope, load the yaml file into the @map
-      #
-      def load_config( dirname, scope )
-        map = Map.new
-        Dir.glob( File.join(@dirname, '*.yml') ).each do |config_fname|
-          file_map  = Yacl::Loader::YamlFile.new( config_fname ).map
-          namespace = File.basename( config_fname, ".yml" )
-          map.set( namespace, file_map )
+      class << self
+
+        def validate_and_load_properties( filename, scope = nil )
+          validate_directory( filename )
+          YamlDir.load_properties( filename, scope )
         end
-        return map
+
+        # Validate that the give dirname is a valid, readable dir
+        #
+        def validate_directory( dirname )
+          raise Error, "#{dirname} does not exist" unless File.exist?( dirname )
+          raise Error, "#{dirname} is not a directory" unless File.directory?( dirname )
+        end
+
+        # Given the input dirname and a scope, load the yaml file into the @map
+        #
+        def load_properties( dirname, scope )
+          p = Properties.new
+          Dir.glob( File.join( dirname, '*.yml') ).each do |config_fname|
+            file_properties = Yacl::Loader::YamlFile.new( :file => config_fname ).properties
+            namespace       = File.basename( config_fname, ".yml" )
+            file_properties.each do |k,v|
+              args = [ namespace, k ].flatten
+              args << v
+              p.set( *args )
+            end
+          end
+          return p
+        end
       end
     end
   end
 end
-

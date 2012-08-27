@@ -36,11 +36,16 @@ module Yacl
     end
 
     def scopes
+      scope_names.to_a.sort
+    end
+    private
+
+    def scope_names
       s = Set.new
       keys.each do |k|
         s << k.split(".").first
       end
-      s.to_a.sort
+      return s
     end
   end
 end

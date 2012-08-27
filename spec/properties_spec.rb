@@ -8,6 +8,11 @@ describe 'Yacl::Properties' do
   it "can be initialized with a hash" do
     p = Yacl::Properties.new(  'a' => 'foo', 'b' => 'bar'  )
     p['a'].must_equal 'foo'
+    p.a.must_equal 'foo'
+  end
+
+  it "can access values with a dot notiation" do
+    @properties.my.b.must_equal 'bar'
   end
 
   it "can be scoped by a prefix" do

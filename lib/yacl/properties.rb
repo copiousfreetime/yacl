@@ -14,8 +14,8 @@ module Yacl
   class Properties
     extend Forwardable
 
-    # Currently wrapping a hash.
-    def_delegators :@map, :fetch, :store, :delete, :clear, :[], :[]=, :has_key?, :each, :length, :keys, :method_missing
+    # Currently wrapping a map
+    def_delegators :@map, :set, :get, :fetch, :store, :delete, :clear, :[], :[]=, :has_key?, :each, :length, :keys, :method_missing
 
     def initialize( initial = {} )
       @map = Map.new

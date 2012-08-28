@@ -3,6 +3,7 @@ module Yacl
   VERSION = "0.0.1"
   class Error < ::StandardError; end
 end
+require 'yacl/properties'
 require 'yacl/configuration'
-require 'yacl/define/defaults'
+require 'yacl/define'
 require 'yacl/loader'

@@ -14,8 +14,24 @@ module Yacl
   class Properties
     extend Forwardable
 
+    # Internal: returns the list of methods to delegate to the internal Map
+    # instance
+    #
+    # Returns an Array of method names
+    def self.delegating_to_map
+      [ :set, :get, :fetch, :store, :delete, :clear, :[], :[]=, :has_key?, :each, :length, :keys, :method_missing ]
+    end
+
+    # Internal: Returns the list of methods that may be delegated to a
+    # Properties instance.
+    #
+    # Returns an Array of method names
+    def self.delegatable_methods
+      delegating_to_map + [ :scoped_by, :scopes, :has_scope? ]
+    end
+
     # Currently wrapping a map
-    def_delegators :@map, :set, :get, :fetch, :store, :delete, :clear, :[], :[]=, :has_key?, :each, :length, :keys, :method_missing
+    def_delegators :@map, *Properties.delegating_to_map
 
     def initialize( initial = {} )
       @map = Map.new

@@ -1,51 +1,60 @@
 module Yacl
   module Define
-  # Use SetDefaults to extend a class and allow it to be the encapsulation of
-  # hardcoced default configuration parameters
-  #
-  #   class MyDefaults
-  #     extend Yacl::Define::Defaults
-  #
-  #     default 'host.name', 'localhost'
-  #   end
-  #
-  # Now you can use either MyDefaults itself, or an instance of the MyDefaults
-  # class to find your defaults.
-  #
-  #   puts MyDefaults.host.name # => 'localhost'
-  #   d = MyDefaults.new
-  #   d.host.name               # => 'localhost'
-  #
-  module Defaults
-    class Error< ::Yacl::Error; end
+    # Public: A base class for use in defining your application's default
+    # configuration properties.
+    #
+    # For the API purposes, classes that inherit from Defaults may behave as
+    # both Loader and Properties classes.
+    #
+    # Examples:
+    #
+    #   class MyDefaults < Yacl::Define::Defaults
+    #     default 'host.name', 'localhost'
+    #     default 'host.port', 4321
+    #   end
+    #
+    # Now you can use an instances of MyDefaults to find your defaults
+    #
+    #   d = MyDefaults.new
+    #   d.host.name               # => 'localhost'
+    class Defaults
+      class Error< ::Yacl::Error; end
+      extend Forwardable
 
-    module ClassMethods
-
-      def __map__
-        if not defined? @__map__ then
-          @__map__  = Map.new
-        end
-        return @__map__
+      # Internal: Create the instance of Properties that will be populated by
+      # calls to Properties::default.
+      #
+      # Returns: Properties
+      def self.properties
+        @properties ||= ::Yacl::Properties.new
       end
 
-      def default( name, value )
-        args = name.split(".")
+      # Public: Define a property and its value.
+      #
+      # name  - The String name of the property.
+      # value - The obj to be the default value for the given name.
+      #
+      # Returns nothing.
+      def self.default( name, value )
+        args = name.to_s.split('.')
         args << value
-        __map__.set( *args )
+        properties.set( *args )
       end
 
-      def method_missing( method, *args )
-        __map__.send( method, *args )
+      # Behave as if we are an instance of Properties
+      def_delegators :@properties, *Properties.delegatable_methods
+
+      # Internal: Return the Properties so we behave like a Loader
+      attr_reader :properties
+
+      # Internal: Fake out being a Loader.
+      #
+      # This method is here to implement the LoaderAPI
+      #
+      # Returns nothing.
+      def initialize( opts = {} )
+        @properties = self.class.properties
       end
     end
-
-    def method_missing( method, *args )
-      self.class.send( method, *args )
-    end
-
-    def self.included( klass )
-      klass.extend( ClassMethods )
-    end
-  end
   end
 end

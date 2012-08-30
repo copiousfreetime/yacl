@@ -11,6 +11,6 @@ describe 'Yacl::Loader' do
 
   it "returns a Properties instance" do
     p = @loader.properties
-    p.sizes.must_equal 0
+    p.length.must_equal 0
   end
 end

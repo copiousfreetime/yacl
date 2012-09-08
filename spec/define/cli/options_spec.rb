@@ -30,16 +30,5 @@ describe Yacl::Define::Defaults do
     props.system.must_equal 'foo'
   end
 
-#  it "has a list of options" do
-#    @ot.
-#  end
-#  it "allows for instance level access to the defaults" do
-#    @dt.host.name.must_equal 'localhost'
-#    @dt.host.port.must_equal 80
-#  end
-
-  #it "does not allow for the setting of default values" do
-  #  lambda { @dt.set( 'host.foo', 'bar' ) }.must_raise Yacl::Define::Defaults::Error
-  #end
 end
 

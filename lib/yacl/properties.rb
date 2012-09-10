@@ -65,12 +65,13 @@ module Yacl
 
     def expanded_keys( hash )
       hash.each do |k,v|
-        yield expand_key( k ), v
+        ek = expand_key( k )
+        yield ek, v unless ek.empty?
       end
     end
 
     def expand_key( str )
-      case str
+      ek = case str
       when Array
         str
       when /\./
@@ -78,6 +79,7 @@ module Yacl
       else
         [ str ]
       end
+      ek.select { |k| k.to_s.strip.length > 0 }
     end
   end
 end

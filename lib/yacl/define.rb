@@ -3,4 +3,5 @@ module Yacl
   end
 end
 require 'yacl/define/defaults'
-require 'yacl/define/lookups'
+require 'yacl/define/cli'
+require 'yacl/define/configuration'

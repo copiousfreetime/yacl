@@ -29,6 +29,12 @@ module Yacl::Define::Cli
       self.class.banner
     end
 
+    def each
+      self.class.opt_list.each do |o|
+        yield o
+      end
+    end
+
     private
 
     # Given the input hash and a key prefix, load the hash into a the @map

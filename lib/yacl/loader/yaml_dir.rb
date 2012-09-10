@@ -5,10 +5,16 @@ class Yacl::Loader
   class YamlDir < ::Yacl::Loader
     class Error < ::Yacl::Loader::Error; end
 
-    def initialize( options = {} )
+    def initialize( opt = {} )
       super
-      @dirname  = options.fetch( :directory )
-      @scope    = options.fetch( :scope, nil )
+      @dirname   = options[:directory]
+      @parameter = options[:parameter]
+
+      if (not @dirname) and (configuration and @parameter) then
+        @dirname = configuration.get( @parameter )
+      end
+
+      @scope     = options[:scope]
       YamlDir.validate_directory( @dirname )
     end
 
@@ -26,6 +32,7 @@ class Yacl::Loader
       # Validate that the give dirname is a valid, readable dir
       #
       def validate_directory( dirname )
+        raise Error, "No directory specified" unless dirname
         raise Error, "#{dirname} does not exist" unless File.exist?( dirname )
         raise Error, "#{dirname} is not a directory" unless File.directory?( dirname )
       end

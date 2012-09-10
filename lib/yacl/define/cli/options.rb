@@ -17,7 +17,7 @@ module Yacl::Define::Cli
     # Public
     def self.banner( *args )
       @banner = args.first unless args.empty?
-      @banner || "Usage  :  #{File.basename($0)} [options]+\nOptions:"
+      @banner ||= "Usage  :  #{File.basename($0)} [options]+\nOptions:"
     end
 
     # Public

@@ -1,6 +1,6 @@
 module Yacl::Define::Cli
 
-  Option = Struct.new( :property_name, :long, :short, :description )
+  Option = Struct.new( :property_name, :long, :short, :description, :cast)
 
   class Options < ::Yacl::Loader
 
@@ -11,7 +11,8 @@ module Yacl::Define::Cli
 
     # Public
     def self.opt(name, p = {} )
-      opt_list << Option.new( name, p[:long], p[:short], p[:description ] )
+      opt_list << Option.new( name, p[:long], p[:short], p[:description ], p[:cast] )
+    end
     end
 
     # Public
@@ -28,7 +29,10 @@ module Yacl::Define::Cli
       hash.each do |k,v|
         self.class.opt_list.each do |option|
           if option.long == k then
-            prop_hash[option.property_name] = v
+            if (option.cast == :boolean) or v then
+              prop_hash[option.property_name] = v
+            else
+            end
           end
         end
       end

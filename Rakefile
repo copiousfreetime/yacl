@@ -19,6 +19,14 @@ namespace :develop do
     require 'rubygems/dependency_installer'
     installer = Gem::DependencyInstaller.new
 
+    # list these here instead of gem dependencies since there is not a way to
+    # specify ruby version specific dependencies
+    if RUBY_VERSION < "1.9.2"
+      Util.platform_gemspec.add_development_dependency( 'rcov', '~> 0.9.11' )
+    else
+      Util.platform_gemspec.add_development_dependency( 'simplecov', '~> 0.6.4' )
+    end
+
     puts "Installing gem depedencies needed for development"
     Util.platform_gemspec.dependencies.each do |dep|
       if dep.matching_specs.empty? then
@@ -87,19 +95,31 @@ end
 # Coverage - optional code coverage, rcov for 1.8 and simplecov for 1.9, so
 #            for the moment only rcov is listed.
 #------------------------------------------------------------------------------
-begin
- require 'rcov/rcovtask'
- Rcov::RcovTask.new do |t|
-   t.libs      << 'spec'
-   t.pattern   = 'spec/**/*_spec.rb'
-   t.verbose   = true
-   t.rcov_opts << "-x ^/"           # remove all the global files
-   t.rcov_opts << "--sort coverage" # so we see the worst files at the top
- end
-rescue LoadError
- Util.task_warning( 'rcov' )
+if RUBY_VERSION <= "1.9.2"
+  begin
+   require 'rcov/rcovtask'
+   Rcov::RcovTask.new( 'coverage' ) do |t|
+     t.libs      << 'spec'
+     t.pattern   = 'spec/**/*_spec.rb'
+     t.verbose   = true
+     t.rcov_opts << "-x ^/"           # remove all the global files
+     t.rcov_opts << "--sort coverage" # so we see the worst files at the top
+   end
+  rescue LoadError
+   Util.task_warning( 'rcov' )
+  end
+else
+  begin
+    require 'simplecov'
+    desc 'Run tests with code coverage'
+    task :coverage do
+      ENV['COVERAGE'] = 'true'
+      Rake::Task[:test].execute
+    end
+  rescue LoadError
+    Util.task_warning( 'simplecov' )
+  end
 end
-
 #------------------------------------------------------------------------------
 # Manifest - We want an explicit list of thos files that are to be packaged in
 #            the gem. Most of this is from Hoe.
@@ -156,12 +176,12 @@ This.gemspec['ruby'] = Gem::Specification.new do |spec|
 
   # The Runtime Dependencies
   spec.add_dependency( 'map', '~> 6.2.0')
+  spec.add_dependency( 'trollop', '~> 1.16' )
 
   # The Development Dependencies
   spec.add_development_dependency( 'rake'     , '~> 0.9.2.2')
   spec.add_development_dependency( 'minitest' , '~> 3.3.0' )
   spec.add_development_dependency( 'rdoc'     , '~> 3.12'   )
-
 end
 
 

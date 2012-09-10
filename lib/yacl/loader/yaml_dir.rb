@@ -9,7 +9,6 @@ class Yacl::Loader
       super
       @dirname   = options[:directory]
       @parameter = options[:parameter]
-
       if (not @dirname) and (configuration and @parameter) then
         @dirname = configuration.get( @parameter )
       end

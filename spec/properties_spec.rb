@@ -43,6 +43,11 @@ describe 'Yacl::Properties' do
     s.foo.must_equal 'wibble'
   end
 
+  it "returns a blank property if scoped by someting that doesn't exist" do
+    s = @properties.scoped_by( :does, :not, :exist )
+    s.length.must_equal 0
+  end
+
   it "can say that it does not have a scope" do
     @properties.has_scope?( 'your' ).must_equal false
   end

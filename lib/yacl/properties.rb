@@ -45,7 +45,8 @@ module Yacl
     # prefix removed.
     def scoped_by( *scope )
       scope = scope.length == 1 ? scope.first : scope
-      Properties.new( @map.get( expand_key( scope ) ) )
+      sub_map = @map.get( expand_key( scope ) ) || {}
+      Properties.new( sub_map )
     end
 
     def scopes

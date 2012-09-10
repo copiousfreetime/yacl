@@ -31,11 +31,20 @@ class Yacl::Loader
     # Given the input hash and a key prefix, load the hash into a the @map
     #
     def load_properties( env, prefix )
-      dot_env    = convert_to_dotted_keys( env )
-      dot_prefix = to_property_path( prefix )
-      p          = Yacl::Properties.new( dot_env )
-      p          = p.scoped_by( dot_prefix ) if dot_prefix
+      dot_env     = convert_to_dotted_keys( env )
+      dot_prefix  = to_property_path( prefix )
+      prefix_only = prefix_keys_only( dot_prefix, dot_env )
+      p           = Yacl::Properties.new( prefix_only )
+      p           = p.scoped_by( dot_prefix ) if dot_prefix
       return p
+    end
+
+    def prefix_keys_only( prefix, hash)
+      only = {}
+      hash.each do |k,v|
+        only[k] = v if k =~ /#{prefix}/
+      end
+      return only
     end
 
     def convert_to_dotted_keys( hash )

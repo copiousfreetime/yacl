@@ -13,11 +13,20 @@ module Yacl::Define::Cli
     def self.opt(name, p = {} )
       opt_list << Option.new( name, p[:long], p[:short], p[:description ], p[:cast] )
     end
+
+    # Public
+    def self.banner( *args )
+      @banner = args.first unless args.empty?
+      @banner || "Usage  :  #{File.basename($0)} [options]+\nOptions:"
     end
 
     # Public
     def properties
       load_properties( @options )
+    end
+
+    def banner
+      self.class.banner
     end
 
     private

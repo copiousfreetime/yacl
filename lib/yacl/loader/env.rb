@@ -13,10 +13,13 @@ class Yacl::Loader
   #   config = Yacl::Loader::Env.new( ENV, 'MY_APP' ).config
   #
   class Env < ::Yacl::Loader
+    class Error < ::Yacl::Loader::Error; end
+
     def initialize( opts = {} )
       super
       @env    = @options.fetch( :env, ENV )
       @prefix = @options.fetch( :prefix, nil )
+      raise Error, "No environment variable prefix is given" unless @prefix
     end
 
     def properties

@@ -24,29 +24,58 @@ module Yacl::Define
       items << Item.new( klass, options )
     end
 
+    def self.has_on_error?
+      defined? @on_error
+    end
+
+    def self.on_error( callable = nil, &block )
+      if callable then
+        @on_error = callable
+      elsif block_given?
+        @on_error =  block
+      elsif defined? @on_error
+        return @on_error
+      else
+        raise Error, "on_error requires the use of a callable or a block"
+      end
+    end
+
     def items
       self.class.items
     end
 
-    def initialize( params = {} )
-      @configurations = []
-      loader_params = params.merge( :configuration => self )
-      self.class.items.each do |item|
-        cfg = item.configuration( loader_params )
-        puts cfg.properties.inspect
-        @configurations << cfg
+    attr_reader :properties
 
+    def initialize( params = {} )
+      @properties = load_properties( params, items )
+    rescue Yacl::Error => ye
+      if self.class.has_on_error? then
+        self.class.on_error.call( ye )
       end
     end
 
-    def get( property_name )
-      @configurations.find do |cfg|
-        if cfg.has_key?( property_name )then
-          cfg.get( property_name )
-        else
-          false
-        end
+    extend Forwardable
+    # Behave as if we are an instance of Properties
+    def_delegators :@properties, *Yacl::Properties.delegatable_methods
+
+    private
+
+    def load_properties( params, items )
+      loaded_properties = []
+      items.each do |item|
+        properties_so_far = merge_properties( loaded_properties )
+        item_params = params.merge( :properties => properties_so_far )
+        loaded_properties << item.load_properties( item_params )
       end
+      return merge_properties( loaded_properties )
+    end
+
+    def merge_properties( properties_list )
+      props = ::Yacl::Properties.new
+      properties_list.reverse.each do |p|
+        props.merge!( p )
+      end
+      return props
     end
   end
 end

@@ -26,6 +26,15 @@ module Yacl
     def properties
       Properties.new
     end
+
+    # Internal:
+    #
+    # The properites that are passed in to use should we need them while loading
+    #
+    # Returns: Properites
+    def reference_properties
+      @options[:properties]
+    end
   end
 end
 require 'yacl/loader/env'

@@ -12,7 +12,7 @@ module Yacl::Define::Cli
 
     def initialize( opts = {} )
       super
-      @argv = opts[:argv] || ARGV
+      @argv = opts[:argv]
     end
 
     def properties

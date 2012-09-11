@@ -8,9 +8,10 @@ class Yacl::Loader
     def initialize( opt = {} )
       super
       @dirname   = options[:directory]
-      @parameter = options[:parameter]
-      if (not @dirname) and (configuration and @parameter) then
-        @dirname = configuration.get( @parameter )
+      @parameter = YamlDir.mapify_key( options[:parameter] )
+
+      if (not @dirname) and (reference_properties and @parameter) then
+        @dirname = reference_properties.get( *@parameter )
       end
 
       @scope     = options[:scope]
@@ -22,6 +23,11 @@ class Yacl::Loader
     end
 
     class << self
+
+      def mapify_key( param )
+        return param unless param.kind_of?( String )
+        return param.split('.')
+      end
 
       def validate_and_load_properties( filename, scope = nil )
         validate_directory( filename )

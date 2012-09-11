@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'myapp'
+
+MyApp::Job::ForSomething.new( "pipeline.dir" => "/over/there" )

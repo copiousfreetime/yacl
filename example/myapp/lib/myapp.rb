@@ -1,6 +1,4 @@
-require 'yacl'
 module MyApp
 end
-
-require 'myapp/cli'
-require 'myapp/configuration'
+require 'myapp/defaults'
+require 'myapp/job'

@@ -5,7 +5,8 @@ module Yacl::Define::Cli
   class Runner
 
     def self.run( argv = ARGV, env = ENV )
-      self.new( argv, env ).run
+      r = self.new( argv, env )
+      r.run
     end
 
     def self.configuration( *args )

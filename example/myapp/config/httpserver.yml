@@ -1,0 +1,3 @@
+port: 4321
+bind: tcp://0.0.0.0
+docroot: /usr/local/www/htdocs

@@ -1,30 +1,70 @@
 require 'trollop'
 module Yacl::Define::Cli
-  # Parser is a wrapper around the trollop parser, and it is also a loader
+  # Parser is a Loader that uses a Cli::Options class and the Trollop parser to
+  # convert commandline options into a Properties instance. It is to be
+  # inherited from so you can have your own parser per commandline program in
+  # your application suite.
+  #
+  # Example:
+  #
+  #   class MyOptions < ::Yacl::Define::Cli::Options
+  #     opt 'log.level', :long => 'log-level', :short => 'l', :description => "Logging Level", :cast => :string
+  #     opt 'config.dir',:long => 'config-dir', :short => 'c', :description => "Configuration directory", :cast => :string
+  #   end
+  #
+  #   class MyParser < ::Yacl::Define::Cli::Parser
+  #     banner "Usage: myapp [options]+"
+  #     options MyOptions
+  #   end
+  #
+  #   p = MyParser.new( :argv => ARGV )
+  #   p.properties #=> a Properties instance
+  #
   class Parser < ::Yacl::Loader
 
-    # Takes a class that when instantiated with no options may be used as an
-    # enumerable of Cli::Option instances
+    # Public: Define the options Class that is be used by this Parser, or return
+    # the existin Class if it is already defined.
+    #
+    # klass - A Class that is a child class of Cli::Options.
+    #
+    # Returns the current options Class.
     def self.options( *args )
       @options_klass = args.first unless args.empty?
       return @options_klass
     end
 
-    # Public
+    # Public: Set or retrieve the banner text.
+    #
+    # text - A String to be displayed as part of the help text.
+    #
+    # Returns the value set, or the default value if one is not set.
     def self.banner( *args )
       @banner = args.first unless args.empty?
       @banner ||= "Usage  :  #{File.basename($0)} [options]+\nOptions:"
     end
 
-    def banner
-      self.class.banner
-    end
-
+    # Create a new Parser instance
+    #
+    # opts - The hash of options for this Loader
+    #        :argv - The commandline options passed to the Parser.
+    #        other options as per the Loader class.
+    #
     def initialize( opts = {} )
       super
       @argv = opts[:argv]
     end
 
+    # Public: Retrive the class level banner text.
+    #
+    # Returns the String banner text
+    def banner
+      self.class.banner
+    end
+
+    # Public: Return the Properties instance that is created by parsing the
+    # commandline options.
+    #
+    # Returns a Properties instance.
     def properties
       h = parse( @argv )
       o = options_klass.new( h )
@@ -33,6 +73,9 @@ module Yacl::Define::Cli
 
     private
 
+    # Internal: Return the class level value stored in Parser#options
+    #
+    # Returns a Class
     def options_klass
       self.class.options
     end

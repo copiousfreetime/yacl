@@ -8,14 +8,14 @@ module Yacl::Spec::Define
     opt 'system'      , :long => 'system',       :short => 's', :description => "The system setting"
   end
 
-  class OptionsWithBannerTest < OptionsTest
-    banner "MyApp version 4.2"
-  end
+  #class OptionsWithBannerTest < OptionsTest
+    #banner "MyApp version 4.2"
+  #end
 end
 
 
 
-describe Yacl::Define::Defaults do
+describe Yacl::Define::Cli::Options do
 
   it "has all the options listed in the class" do
     Yacl::Spec::Define::OptionsTest.opt_list.size.must_equal 3
@@ -41,16 +41,6 @@ describe Yacl::Define::Defaults do
     props.pipeline.dir.must_equal '/var/log/'
     props.timelimit.must_equal 40
     props.system.must_equal 'foo'
-  end
-
-  it "has a default banner" do
-    ot = Yacl::Spec::Define::OptionsTest.new
-    ot.banner.must_match /Usage.*Options:/m
-  end
-
-  it "can set a banner" do
-    bt = Yacl::Spec::Define::OptionsWithBannerTest.new
-    bt.banner.must_equal 'MyApp version 4.2'
   end
 
 end

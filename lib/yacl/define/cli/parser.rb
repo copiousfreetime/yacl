@@ -10,6 +10,16 @@ module Yacl::Define::Cli
       return @options_klass
     end
 
+    # Public
+    def self.banner( *args )
+      @banner = args.first unless args.empty?
+      @banner ||= "Usage  :  #{File.basename($0)} [options]+\nOptions:"
+    end
+
+    def banner
+      self.class.banner
+    end
+
     def initialize( opts = {} )
       super
       @argv = opts[:argv]

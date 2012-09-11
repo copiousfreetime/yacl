@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'myapp'
+
+c = MyApp::OtherConfig.new
+puts c.properties.map.inspect

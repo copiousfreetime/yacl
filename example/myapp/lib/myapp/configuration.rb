@@ -37,6 +37,15 @@ module MyApp
     end
   end
 
+  class OtherConfig < Yacl::Define::Configuration
+    try Yacl::Loader::Env, :prefix => 'MY_APP'
+    try Yacl::Loader::YamlDir, :directory => File.expand_path( "../../../config", __FILE__ )
+    try MyApp::Defaults
+    on_error do |exception|
+      $stderr.puts exception
+      $stderr.puts exception.backtrace.join("\n")
+    end
+  end
 end
 
 

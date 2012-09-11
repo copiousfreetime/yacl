@@ -39,7 +39,6 @@ module Yacl::Define::Cli
 
     def parse( argv )
       Trollop::with_standard_exception_handling( delegate_parser ) do
-        raise Trollop::HelpNeeded if argv.empty?
         delegate_parser.parse( argv )
       end
     end

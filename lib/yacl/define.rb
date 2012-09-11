@@ -4,4 +4,4 @@ module Yacl
 end
 require 'yacl/define/defaults'
 require 'yacl/define/cli'
-require 'yacl/define/configuration'
+require 'yacl/define/plan'

@@ -1,5 +1,5 @@
 module Yacl::Define
-  class Configuration
+  class Plan
     class Error < ::Yacl::Error; end
     class Item
       def initialize( klass, options )
@@ -48,7 +48,8 @@ module Yacl::Define
     attr_reader :properties
 
     def initialize( params = {} )
-      @properties = load_properties( params, items )
+      initial_properties = params[:initial_properties] || Yacl::Properties.new
+      @properties = load_properties( initial_properties, params, items )
     rescue Yacl::Error => ye
       if self.class.has_on_error? then
         self.class.on_error.call( ye )
@@ -61,11 +62,11 @@ module Yacl::Define
 
     private
 
-    def load_properties( params, items )
-      loaded_properties = []
+    def load_properties( initial_properties, params, items )
+      loaded_properties = [ initial_properties ]
       items.each do |item|
         properties_so_far = merge_properties( loaded_properties )
-        item_params = params.merge( :properties => properties_so_far )
+        item_params       = params.merge( :properties => properties_so_far )
         loaded_properties << item.load_properties( item_params )
       end
       return merge_properties( loaded_properties )

@@ -41,15 +41,9 @@ module Yacl::Define::Cli
     #
     def load_properties( hash )
       prop_hash = {}
-      hash.each do |k,v|
-        self.class.opt_list.each do |option|
-          if option.long == k then
-            if (option.cast == :boolean) or v then
-              prop_hash[option.property_name] = v
-            else
-            end
-          end
-        end
+      opt_list.each do |o|
+        next unless hash.has_key?( o.long )
+        prop_hash[o.property_name] = hash[o.long]
       end
       return Yacl::Properties.new( prop_hash )
     end

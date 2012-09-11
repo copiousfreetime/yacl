@@ -19,7 +19,7 @@ module Yacl
     #
     # Returns an Array of method names
     def self.delegating_to_map
-      [ :set, :get, :fetch, :store, :delete, :clear, :[], :[]=, :has_key?, :each, :length, :keys, :method_missing ]
+      [ :set, :get, :fetch, :store, :delete, :clear, :[], :[]=, :has?, :has_key?, :each, :length, :keys, :method_missing ]
     end
 
     # Internal: Returns the list of methods that may be delegated to a
@@ -33,12 +33,21 @@ module Yacl
     # Currently wrapping a map
     def_delegators :@map, *Properties.delegating_to_map
 
+    # Internal: used only for merging
+    attr_reader :map
+
     def initialize( initial = {} )
       @map = Map.new
       expanded_keys( initial ) do |k,v|
         k << v
         @map.set( *k )
       end
+    end
+
+    # Merge another Properties on top of this one, replacing exiting values with
+    # new ones.
+    def merge!( other )
+      @map.merge!( other.map )
     end
 
     # Return a new Properties that is a subset of the properties with the first

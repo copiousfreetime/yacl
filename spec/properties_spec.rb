@@ -51,4 +51,10 @@ describe 'Yacl::Properties' do
   it "can say that it does not have a scope" do
     @properties.has_scope?( 'your' ).must_equal false
   end
+
+  it "can merge with another property" do
+    @properties.merge!( Yacl::Properties.new( 'c' => 'baz', 'my.b' => 'blah' ) )
+    @properties.c.must_equal 'baz'
+    @properties.my.b.must_equal 'blah'
+  end
 end

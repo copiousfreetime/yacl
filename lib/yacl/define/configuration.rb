@@ -1,15 +1,16 @@
 module Yacl::Define
   class Configuration
-    class Error< ::Yacl::Error; end
+    class Error < ::Yacl::Error; end
     class Item
       def initialize( klass, options )
         @loader_klass = klass
         @options      = options
       end
 
-      def configuration( loader_params )
-        opt = @options.merge( loader_params )
-        Yacl::Configuration.new( @loader_klass.new( opt ) )
+      def load_properties( params )
+        opt    = @options.merge( params )
+        loader = @loader_klass.new( opt )
+        loader.properties
       end
     end
 

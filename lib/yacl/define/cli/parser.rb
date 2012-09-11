@@ -1,8 +1,8 @@
 require 'trollop'
 module Yacl::Define::Cli
-  # Parser is a Loader that uses a Cli::Options class and the Trollop parser to
-  # convert commandline options into a Properties instance. It is to be
-  # inherited from so you can have your own parser per commandline program in
+  # Public: Parser is a Loader that uses a Cli::Options class and the Trollop
+  # parser to convert commandline options into a Properties instance. It is to
+  # be inherited from so you can have your own parser per commandline program in
   # your application suite.
   #
   # Example:

@@ -46,8 +46,8 @@ module Yacl::Define::Cli
     # plan - A class you define that inherits from Yacl::Define::Plan
     #
     # Returns: the plan class if it is set, nil otherwise.
-    def self.plan( p = nil )
-      @plan_klass = p if p
+    def self.plan( *args )
+      @plan_klass = args.first unless args.empty?
       return @plan_klass
     end
 

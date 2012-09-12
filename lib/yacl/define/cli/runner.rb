@@ -24,6 +24,7 @@ module Yacl::Define::Cli
   #   MyApp::Runner.go
   #
   class Runner
+    class Error < ::Yacl::Error; end
 
     # Public: Execute the Runner
     #

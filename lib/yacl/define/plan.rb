@@ -46,7 +46,7 @@ module Yacl::Define
 
       # Internal: load hte properties from the given Loader class
       #
-      # Returns a Properites instance
+      # Returns a Properties instance
       def load_properties( params )
         opt    = @options.merge( params )
         loader = @loader_klass.new( opt )
@@ -152,15 +152,15 @@ module Yacl::Define
     # Internal: Create the Proprites from an initial properties, a set of params
     # and the list of Items in the class.
     #
-    # initial_properties - a blank Properites, or an initialized Properties
-    #                      instance to use as the highest priority properites
+    # initial_properties - a blank Properties, or an initialized Properties
+    #                      instance to use as the highest priority properties
     # params             - A Hash that will be passed to each Item when it is
     #                      loaded.
     # items              - An Array of Item instances
     #
     # The properties are loaded in definitiaion order, that is the order they
     # appear in the class definition. The initial properties are recalculated on
-    # each iteration as the next Properites may use some information from the
+    # each iteration as the next Properties may use some information from the
     # previous Properties to load itself.
     #
     # The final Properties that is returned is a merging of all the loaded
@@ -183,7 +183,7 @@ module Yacl::Define
     # Internal: Merge a list of Properties instances in the reverse order of the
     # Array in which they exist
     #
-    # properties_list - an Array of Properites
+    # properties_list - an Array of Properties
     #
     # Returns a Properties instances.
     def merge_properties( properties_list )

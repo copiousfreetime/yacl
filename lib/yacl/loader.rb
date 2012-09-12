@@ -29,9 +29,9 @@ module Yacl
 
     # Internal:
     #
-    # The properites that are passed in to use should we need them while loading
+    # The properties that are passed in to use should we need them while loading
     #
-    # Returns: Properites
+    # Returns: properties
     def reference_properties
       @options[:properties]
     end

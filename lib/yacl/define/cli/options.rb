@@ -18,7 +18,7 @@ module Yacl::Define::Cli
   #   end
   #
   #   o = MyOptions.new( 'log-level' => 'debug', 'config-dir' => '/tmp/foo' )
-  #   o.properites # => Properties instance with 'log.level' => debug and 'config.dir' => '/tmp/foo'
+  #   o.properties # => Properties instance with 'log.level' => debug and 'config.dir' => '/tmp/foo'
   #
   class Options < ::Yacl::Loader
 

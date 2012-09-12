@@ -51,7 +51,7 @@ module Yacl::Define::Cli
     #
     def initialize( opts = {} )
       super
-      @argv = opts[:argv]
+      @argv = opts[:argv] || []
     end
 
     # Public: Retrive the class level banner text.

@@ -22,7 +22,7 @@ describe Yacl::Define::Cli::Parser do
 
   it "has a default banner" do
     bt = Yacl::Spec::Define::ParserTest.new
-    bt.banner.must_match /Usage.*Options:/m
+    bt.banner.must_match( /Usage.*Options:/m )
   end
 
   it "can set a banner" do

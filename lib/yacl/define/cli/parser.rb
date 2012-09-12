@@ -81,9 +81,8 @@ module Yacl::Define::Cli
     end
 
     def delegate_parser
-      trollop_options = options_klass.new
-      Trollop::Parser.new do
-        banner trollop_options.banner
+      Trollop::Parser.new( options_klass.new, self.banner ) do |trollop_options, banner_text|
+        text banner_text
         trollop_options.each do |x|
           opt x.long, x.description, :type => x.cast
         end

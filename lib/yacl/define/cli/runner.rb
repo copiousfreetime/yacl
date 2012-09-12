@@ -59,7 +59,23 @@ module Yacl::Define::Cli
     # This method should be avoided by end users, they should call #go instead.
     def initialize( argv = ARGV, env = ENV )
       raise Error, "No plan class specified in #{self.class}" unless self.class.plan
-      @plan = self.class.plan.new( :argv => argv, :env => env )
+      @plan = plan_klass.new( :argv => argv, :env => env )
+    end
+
+    # Public: Access the Properties instance that is created by the Plan. This
+    # is the fully realized Properties of the plan and should be considered
+    # read-only.
+    #
+    # Returns a Properties instance.
+    def properties
+      @plan.properties
+    end
+
+    # Internal: return the Plan class defined for this Runner class
+    #
+    # Returns a Plan class
+    def plan_klass
+      self.class.plan
     end
   end
 end

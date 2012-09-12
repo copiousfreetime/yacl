@@ -1,13 +1,11 @@
 module Yacl::Define::Cli
-  # Public:
+  # Public: The Runner class is to be used by app developers as the entry point
+  # for the commandline programs. A class that inherits from Runner is what is
+  # placed in a bin/myapp file in the project structure.
   #
-  # The Runner class is to be used by app developers as the entry point for
-  # commandline programs. A class that inherits from Runner would be what is
-  # placed in a bin/myapp file.
-  #
-  # The Runner is configuration with the Plan to use for loading the
-  # configuratin properties and when the plan is loaded, the properties are
-  # available via the #properties method.
+  # The Runner is configured with the Plan to use for loading the configuratin
+  # properties and when the plan is loaded, the properties are available via the
+  # #properties method.
   #
   # Example:
   #
@@ -19,9 +17,13 @@ module Yacl::Define::Cli
   #     end
   #   end
   #
-  # And then in your 'bin/myapp-cli' file you would have:
+  # And in your 'bin/myapp-cli' file you would have:
   #
+  #   # automatically populate with ARGV and ENV
   #   MyApp::Runner.go
+  #
+  #   # or be explicit
+  #   MyApp::Runner.go( ARGV, ENV )
   #
   class Runner
     class Error < ::Yacl::Error; end
@@ -33,7 +35,7 @@ module Yacl::Define::Cli
     #
     # It is assumed that when this method exits, the program is over.
     #
-    # Returns: nothing
+    # Returns nothing.
     def self.go( argv = ARGV, env = ENV )
       r = self.new( argv, env )
       r.run
@@ -41,16 +43,13 @@ module Yacl::Define::Cli
 
     # Public: Define the Plan associated with this Runner.
     #
-    # plan - A class that inherits from Yacl::Define::Plan
+    # plan - A class you define that inherits from Yacl::Define::Plan
     #
     # Returns: the plan class if it is set, nil otherwise.
     def self.plan( p = nil )
       @plan_klass = p if p
       return @plan_klass
     end
-
-    # Internal: the instance of the Plan class used to load the configuration
-    attr_reader :plan
 
     # Internal: Initalize the Runner.
     #

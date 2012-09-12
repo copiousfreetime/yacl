@@ -116,6 +116,7 @@ else
       ENV['COVERAGE'] = 'true'
       Rake::Task[:test].execute
     end
+    CLOBBER << FileList["coverage"]
   rescue LoadError
     Util.task_warning( 'simplecov' )
   end

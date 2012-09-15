@@ -1,11 +1,20 @@
 require 'pathname'
 module Yacl
-  # Loader - the base class of all Loaders
+  # Loader - the base class of all Loaders. It defines the Loader API>
   #
-  # All loaders implement:
+  # The Loader API is:
   #
-  #   initialize( opts = {} ) and make sure to call super
-  #   properties - which must return a Properties instance
+  #   1) The initializer method takes an Hash. This hash is stored in the
+  #      @options and is avaialble to all child clasess via the #options
+  #      method.
+  #
+  #   2) The #properties method takes no parameters and MUST return a Properties
+  #      instance
+  #
+  #   3) If the options passed into the initializer has a :reference_properites
+  #      key, its value is made available via the #reference_properties method.
+  #
+  # Loader also provides a couple of utility methods for use by child classes.
   #
   class Loader
     class Error < ::Yacl::Error; end
@@ -14,6 +23,12 @@ module Yacl
     # Internal: The configuration object this loader is associated with
     attr_reader :configuration
 
+    # Create a new instance of the Loader
+    #
+    # opts - as Hash of options. Well known options are:
+    #        :properties - A Properties object
+    #        :path       - A directory/file path
+    #
     def initialize( opts = {} )
       @options = opts
       @configuration = @options[:configuration]

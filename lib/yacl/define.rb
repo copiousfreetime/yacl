@@ -1,4 +1,6 @@
 module Yacl
+  # Define is the namespace underwhich lives those classes an end user will
+  # inherit from to create their own classes.
   module Define
   end
 end

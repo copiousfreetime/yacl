@@ -18,10 +18,9 @@ module Yacl
   #
   class Loader
     class Error < ::Yacl::Error; end
-    attr_reader :options
 
-    # Internal: The configuration object this loader is associated with
-    attr_reader :configuration
+    # Internal: The options object this loader is associated with
+    attr_reader :options
 
     # Create a new instance of the Loader
     #
@@ -31,7 +30,6 @@ module Yacl
     #
     def initialize( opts = {} )
       @options = opts
-      @configuration = @options[:configuration]
     end
 
     # Internal:

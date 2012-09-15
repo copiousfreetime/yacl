@@ -14,7 +14,7 @@ class Yacl::Loader
   #
   # And Creating a YamlDir instance -
   #
-  #   yd    = YamlDir.new( :directory => "./config" )
+  #   yd    = YamlDir.new( :path => "./config" )
   #
   # Then you will have propertes like these.
   #
@@ -52,26 +52,27 @@ class Yacl::Loader
     # Public: Create a new instance of YamlDir
     #
     # opts - A Hash of options
-    #        :direcotory - The filesystem path to the directory to load
+    #        :path       - The filesystem path to the directory to load
     #        :properties - A Properties instance to use in conjunction with
     #                      :parameter
     #        :pararmeter - The parameter to look up within the Properties that
     #                      passed in with :properites in order to populate
-    #                      :directory
+    #                      :path
     #        :scope      - Scope the loded Properties by this value and only
     #                      return that subset from #properties
     #
     def initialize( opt = {} )
       super
-      @dirname   = options[:directory]
+      @path      = YamlDir.extract_path( options )
       @parameter = YamlDir.mapify_key( options[:parameter] )
 
-      if (not @dirname) and (reference_properties and @parameter) then
-        @dirname = reference_properties.get( *@parameter )
+      if (not @path) and (reference_properties and @parameter) then
+        value = reference_properties.get( *@parameter )
+        @path = Pathname.new( value ) if value
       end
 
       @scope     = options[:scope]
-      YamlDir.validate_directory( @dirname )
+      YamlDir.validate_directory( @path )
     end
 
     # Public: Return the Properites that are described by the this YamlDir
@@ -79,20 +80,10 @@ class Yacl::Loader
     #
     # Returns a Properties instance
     def properties
-      YamlDir.validate_and_load_properties( @dirname, @scope )
+      YamlDir.validate_and_load_properties( @path, @scope )
     end
 
     class << self
-
-      # Internal: Return param split on "." 
-      #
-      # This will only be done if param is a String
-      #
-      # Returns an Array or param
-      def mapify_key( param )
-        return param unless param.kind_of?( String )
-        return param.split('.')
-      end
 
       # Internal: Validate the directory and then load the properties.
       #
@@ -107,6 +98,8 @@ class Yacl::Loader
 
       # Internal: Validate the given directory.
       #
+      # path - the Pathname to check.
+      #
       # 1) make sure it is not nil
       # 2) make sure that it exists
       # 3) make sure that it is a directory
@@ -114,10 +107,10 @@ class Yacl::Loader
       # Raise an error if any of the above fail
       #
       # Returns nothing.
-      def validate_directory( dirname )
-        raise Error, "No directory specified" unless dirname
-        raise Error, "#{dirname} does not exist" unless File.exist?( dirname )
-        raise Error, "#{dirname} is not a directory" unless File.directory?( dirname )
+      def validate_directory( path )
+        raise Error, "No directory specified" unless path
+        raise Error, "#{path} does not exist" unless path.exist?
+        raise Error, "#{path} is not a directory" unless path.directory?
       end
 
       # Interal: Load the proprerties scoped by the given scope
@@ -129,7 +122,7 @@ class Yacl::Loader
       def load_properties( dirname, scope )
         p = Yacl::Properties.new
         Dir.glob( File.join( dirname, '*.yml') ).each do |config_fname|
-          file_properties = Yacl::Loader::YamlFile.new( :file => config_fname ).properties
+          file_properties = Yacl::Loader::YamlFile.new( :path => config_fname ).properties
           namespace       = File.basename( config_fname, ".yml" )
           file_properties.each do |k,v|
             args = [ namespace, k ].flatten

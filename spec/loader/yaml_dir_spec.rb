@@ -6,7 +6,7 @@ describe Yacl::Loader::YamlDir do
   end
 
   it "returns a config containing properties" do
-    e = Yacl::Loader::YamlDir.new( :directory => @yaml_dir )
+    e = Yacl::Loader::YamlDir.new( :path => @yaml_dir )
     c = e.properties
     c.httpserver.port.must_equal 4321
     c.database.username.must_equal "myusername"
@@ -14,7 +14,7 @@ describe Yacl::Loader::YamlDir do
   end
 
   it "raises an error if the directory does not exist" do
-    lambda { Yacl::Loader::YamlDir.new( :directory => "/does/not/exist" ).properties }.must_raise Yacl::Loader::YamlDir::Error
+    lambda { Yacl::Loader::YamlDir.new( :path => "/does/not/exist" ).properties }.must_raise Yacl::Loader::YamlDir::Error
   end
 
   it "can lookup the directory in the passed through configuration if it is not given" do
@@ -36,8 +36,8 @@ describe Yacl::Loader::YamlDir do
   end
 
   it "raises an error if no directory was given and the value in the configuration doesn't exist" do
-    cfg = Yacl::Properties.new( 'directory' => @yaml_dir )
-    lambda { Yacl::Loader::YamlDir.new( :properties => cfg, :parameter => 'my.directory' ).properties }.must_raise Yacl::Loader::YamlDir::Error
+    cfg = Yacl::Properties.new( 'path' => @yaml_dir )
+    lambda { Yacl::Loader::YamlDir.new( :properties => cfg, :parameter => 'my.path' ).properties }.must_raise Yacl::Loader::YamlDir::Error
   end
 
 end

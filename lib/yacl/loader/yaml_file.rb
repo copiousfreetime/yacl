@@ -23,13 +23,20 @@ class Yacl::Loader
 
     def initialize( opts = {} )
       super
-      @filename = options.fetch( :file )
-      @scope    = options.fetch( :scope, nil )
-      YamlFile.validate_file( @filename )
+      @path      = YamlFile.extract_path( options )
+      @scope     = options.fetch( :scope, nil )
+      @parameter = YamlFile.mapify_key( options[:parameter] )
+
+      if (not @path) and (reference_properties and @parameter) then
+        @path = Pathname.new( reference_properties.get( *@parameter ) )
+      end
+
+
+      YamlFile.validate_file( @path )
     end
 
     def properties
-      YamlFile.validate_and_load_properties( @filename, @scope )
+      YamlFile.validate_and_load_properties( @path, @scope )
     end
 
     class << self
@@ -46,9 +53,19 @@ class Yacl::Loader
 
       # Internal: Validate that the give Pathname is a valid, readable file
       #
-      def validate_file( filename )
-        raise Error, "#{filename} does not exist" unless File.exist?( filename )
-        raise Error, "#{filename} is not readable" unless File.readable?( filename )
+      # path - the Patname we are going to check
+      #
+      # Validates:
+      #
+      # 1) that path has a value
+      # 1) that the path exists
+      # 2) that the path is readable
+      #
+      # Raises an error if either of the above failes
+      def validate_file( path )
+        raise Error, "No path specified" unless path
+        raise Error, "#{path} does not exist" unless path.exist?
+        raise Error, "#{path} is not readable" unless path.readable?
       end
 
       # Internal: load a Properties from the given filename.

@@ -1,3 +1,4 @@
+require 'pathname'
 module Yacl
   # Loader - the base class of all Loaders
   #
@@ -34,6 +35,30 @@ module Yacl
     # Returns: properties
     def reference_properties
       @options[:properties]
+    end
+
+    # Internal: Return param split on "."
+    #
+    # This will only be done if param is a String
+    #
+    # Returns an Array or param
+    def self.mapify_key( param )
+      return param unless param.kind_of?( String )
+      return param.split('.')
+    end
+
+    # Internal: Extract the value from :path and covert it to a Pathname
+    # If a :path key is found, then extract it and convert the value to a
+    # Pathname
+    #
+    # options - a Hash
+    # key     = the key to extract as a path (default: 'path')
+    #
+    # Returns a Pathname or nil.
+    def self.extract_path( options, key = 'path' )
+      ps = options[key.to_sym] || options[key.to_s]
+      return nil unless ps
+      return Pathname.new( ps )
     end
   end
 end

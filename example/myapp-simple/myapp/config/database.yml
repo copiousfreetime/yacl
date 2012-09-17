@@ -1,0 +1,8 @@
+adapter: postgres
+host: 127.0.0.1
+username: myusername
+password: mypassword
+subpart:
+  foo: bar
+  baz: wibble
+

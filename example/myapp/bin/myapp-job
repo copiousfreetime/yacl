@@ -1,5 +1,10 @@
 #!/usr/bin/env ruby
 
-require 'myapp'
+#------------------------------------------------------------------------------
+# This would be a top-level entrypoint into your system that was not commandline
+# based. Think loaded by some other framework. Maybe a Torquebox Job or a
+# Resqueue Job or something that was more static.
+#------------------------------------------------------------------------------
 
+require 'myapp'
 MyApp::Job::ForSomething.new( "pipeline.dir" => "/over/there" )

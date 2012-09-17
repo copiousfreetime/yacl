@@ -83,7 +83,7 @@ module MyApp
       plan MyApp::Cli::Plan
 
       def run
-        p = plan.properties
+        p = properties
         puts p.map.inspect
       end
     end

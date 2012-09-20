@@ -5,7 +5,7 @@ module MyApp
   #
   # For simpler cases where you want to put all of this together this may make
   # more sense.
-  class Application < ::Yacl::Define::SimpleApp
+  class Application < ::Yacl::Simple::Runner
 
     # This defines a MyApp::Application::Defaults class
     defaults do

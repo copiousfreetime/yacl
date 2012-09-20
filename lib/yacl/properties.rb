@@ -49,7 +49,7 @@ module Yacl
     # Create a new Properites
     #
     # initial - A Hash or Map that is used as the initial values of the
-    # Properites
+    #           Properites
     #
     def initialize( initial = {} )
       @map = Map.new
@@ -66,8 +66,7 @@ module Yacl
     #
     # other - The Properties instance to lay on top of this one.
     #
-    # Returns a Properties
-    # new ones.
+    # Returns nothing
     def merge!( other )
       @map.merge!( other.map )
     end

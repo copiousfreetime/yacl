@@ -29,7 +29,7 @@ module Yacl::Define::Cli
     #
     # Returns the current options Class.
     def self.options( *args )
-      @options_klass = args.first unless args.empty?
+      @options_klass ||= args.first unless args.empty?
       return @options_klass
     end
 
@@ -41,6 +41,14 @@ module Yacl::Define::Cli
     def self.banner( *args )
       @banner = args.first unless args.empty?
       @banner ||= "Usage  :  #{File.basename($0)} [options]+\nOptions:"
+    end
+
+    # Public: Define a commandline option for this Parser.
+    # Using 'opt' over options will dynamically create a child class of Options
+    # for use by this class
+    def self.opt( *args )
+      options( Class.new( Yacl::Define::Cli::Options ) )
+      options.opt( *args )
     end
 
     # Create a new Parser instance

@@ -16,6 +16,13 @@ module Yacl::Spec::Define
     options OptionsForParserTest
   end
 
+  class ParserWithOptions < ::Yacl::Define::Cli::Parser
+    banner "MyApp version 4.3"
+    opt 'pipeline.dir', :long => 'pipeline-dir', :short => 'd', :description => "The pipeline directory we are using", :cast => :string
+    opt 'timelimit'   , :long => 'time-limit',   :short => 't', :description => "The amount of time to run for", :cast => :int
+    opt 'system'      , :long => 'system',       :short => 's', :description => "The system setting", :cast => :string
+  end
+
 end
 
 describe Yacl::Define::Cli::Parser do
@@ -37,6 +44,17 @@ describe Yacl::Define::Cli::Parser do
   it "creates a Properties instance from parsing the commandline" do
     argv = [ '--pipeline-dir' , Dir.pwd, '--time-limit' , "42", '--system', 'out-of-this-world' ]
     p = Yacl::Spec::Define::ParserTest.new( :argv => argv )
+    props = p.properties
+    props.pipeline.dir.must_equal Dir.pwd
+    props.timelimit.must_equal 42
+    props.system.must_equal 'out-of-this-world'
+  end
+
+  it "can define the commanline options internall without a separate Options class" do
+    argv = [ '--pipeline-dir' , Dir.pwd, '--time-limit' , "42", '--system', 'out-of-this-world' ]
+
+    p = Yacl::Spec::Define::ParserWithOptions.new( :argv => argv )
+    p.banner.must_equal 'MyApp version 4.3'
     props = p.properties
     props.pipeline.dir.must_equal Dir.pwd
     props.timelimit.must_equal 42

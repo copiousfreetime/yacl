@@ -23,17 +23,18 @@ describe Yacl::Simple do
   it "#parser creates a child class of Yacl::Define::Parser" do
     klass = Yacl::Simple.parser do
       banner "MySimpleApp version 4.2"
-      opt 'pipeline.dir', :long => 'pipeline-dir', :short => 'd', :description => "The pipeline directory we are using", :cast => :string
-      opt 'timelimit'   , :long => 'time-limit',   :short => 't', :description => "The amount of time to run for", :cast => :int
-      opt 'system'      , :long => 'system',       :short => 's', :description => "The system setting", :cast => :string
+      opt 'host.port', :long => 'port',      :short => 'p', :description => "The port to listen on", :cast => :int
+      opt 'host.address', :long => 'address',   :short => 'a', :description => "The address to listen at", :cast => :string
+      opt 'directory', :long => 'directory', :short => 'd', :description => "The directory to operate out of", :cast => :string
+      opt 'log.level', :long => 'log-level', :short => 'l', :description => "The system setting", :cast => :string
     end
 
-    argv = [ '--pipeline-dir' , Dir.pwd, '--time-limit' , "42", '--system', 'out-of-this-world' ]
+    argv = [ '--directory' , Dir.pwd, '--port' , "4321", '--address', 'localhost' ]
     p = klass.new( :argv => argv )
     p.banner.must_equal 'MySimpleApp version 4.2'
     props = p.properties
-    props.pipeline.dir.must_equal Dir.pwd
-    props.timelimit.must_equal 42
-    props.system.must_equal 'out-of-this-world'
+    props.directory.must_equal Dir.pwd
+    props.host.port.must_equal 4321
+    props.host.address.must_equal 'localhost'
   end
 end

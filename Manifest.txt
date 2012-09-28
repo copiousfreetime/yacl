@@ -3,11 +3,11 @@ LICENSE
 Manifest.txt
 README.rdoc
 Rakefile
-example/myapp-simple/myapp/bin/myapp
-example/myapp-simple/myapp/config/database.yml
-example/myapp-simple/myapp/config/host.yml
-example/myapp-simple/myapp/config/pipeline.yml
-example/myapp-simple/myapp/lib/myapp.rb
+example/myapp-simple/bin/myapp
+example/myapp-simple/config/database.yml
+example/myapp-simple/config/host.yml
+example/myapp-simple/config/pipeline.yml
+example/myapp-simple/lib/myapp.rb
 example/myapp/bin/myapp
 example/myapp/bin/myapp-job
 example/myapp/config/database.yml

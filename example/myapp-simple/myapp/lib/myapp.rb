@@ -5,7 +5,7 @@ module MyApp
   #
   # For simpler cases where you want to put all of this together this may make
   # more sense.
-  class Application < ::Yacl::Simple::Runner
+  class Application < ::Yacl::Simple
 
     # This defines a MyApp::Application::Defaults class
     defaults do
@@ -28,10 +28,10 @@ module MyApp
 
     # This defines a MyApp::Application::Plan class
     plan do
-      try parser
+      try MyApp::Application.parser
       try Yacl::Loader::Env, :prefix => 'MY_APP'
       try Yacl::Loader::YamlDir, :parameter => 'config.dir'
-      try defaults
+      try MyApp::Application.defaults
 
       on_error do |exception|
         $stderr.puts "ERROR: #{exception}"

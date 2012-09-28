@@ -1,5 +1,11 @@
 #!/usr/bin/env ruby
 
+# load path munging so the example works from a git checkout, do not do this
+# in your program
+$: << File.expand_path( "../../../../lib", __FILE__ ) # yacl library
+$: << File.expand_path( "../../lib", __FILE__ )       # lib dir of this sample app
+require 'rubygems'
+
 #------------------------------------------------------------------------------
 # This would be the top level commandline entry point for your program. Feel
 # free to have multiple of them if that is what your situation requires.

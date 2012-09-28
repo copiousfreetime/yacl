@@ -1,0 +1,7 @@
+servers:
+  - "m1.example.com:11211"
+  - "m2.example.com:11211"
+  - "m3.example.com:11211"
+:threadsafe: true
+:failover: true
+:expires_in: 300

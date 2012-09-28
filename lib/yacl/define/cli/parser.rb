@@ -72,9 +72,15 @@ module Yacl::Define::Cli
     # Public: Return the Properties instance that is created by parsing the
     # commandline options.
     #
+    # Nil values from possible defaults from the commandline parser are
+    # filtered out before being merged onto the options.
+    #
     # Returns a Properties instance.
     def properties
-      h = parse( @argv )
+      h = {}
+      parse( @argv ).each do |k,v|
+        h[k] = v unless v.nil?
+      end
       o = options_klass.new( h )
       o.properties
     end

@@ -75,4 +75,11 @@ describe Yacl::Simple do
     simple = Yacl::Spec::Simple.go( argv )
     simple.host.port.must_equal 4321
   end
+
+  it "can use the on_error exception" do
+    out, err = capture_io do
+      Yacl::Spec::Simple.go
+    end
+    err.must_match( /Try --help for help/m )
+  end
 end

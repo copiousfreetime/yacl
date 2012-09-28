@@ -9,3 +9,4 @@ end
 require 'yacl/properties'
 require 'yacl/loader'
 require 'yacl/define'
+require 'yacl/simple'

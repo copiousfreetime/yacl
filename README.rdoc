@@ -10,7 +10,30 @@ YACL is your application configuration library.
 
 == FEATURES
 
-== SYNOPSIS
+Yacl is a full featured commandline and application configuration library. It
+pulls together the different components of a system that provide application
+configuration properties:
+
+  * Commandline options
+  * Environment Variables
+  * Configuration directory
+  * Configuration files
+  * Global Defaults
+
+It allows you to define the order and priority of the various contributors to
+the configuration in a fairly easy way.
+
+== Examples
+
+There are two full examples in the examples directory:
+
+  1. myapp-simple - this uses the Yacl::Simple library to quickly define
+     commandline options, global defaults, configuration directory and
+     environment parsing all in short amout of code using a dsl.
+
+  2. myapp - this is a more full featured approach that you may want to look at
+     should you have more complex application configuration needs. Functionally
+     it is very similar to myapp-simple
 
 == ISC LICENSE
 

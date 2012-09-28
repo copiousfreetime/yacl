@@ -11,9 +11,6 @@ require 'rubygems'
 # free to have multiple of them if that is what your situation requires.
 #------------------------------------------------------------------------------
 
-# This would be the top level commandline entry point for your program. Feel
-# free to have multiple of them if that is what your situation requires.
-
 require 'myapp'
 
 MyApp::Application.go( ARGV, ENV )

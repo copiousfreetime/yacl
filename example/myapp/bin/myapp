@@ -14,8 +14,4 @@ require 'rubygems'
 require 'myapp'
 require 'myapp/cli'
 
-# Try running from the parent directory as:
-#
-#   ruby -Ilib:../../lib -rubygems bin/myapp --time-limit 42 --config-dir ./config --system fun
-#
 MyApp::Cli::Runner.go( ARGV, ENV )

@@ -1,3 +1,4 @@
+require 'yacl'
 module MyApp
   # This is a simplier version of 'myapp' example where we use a DSL instead of
   # explicit classes. Under hte covers, this creats classes that do the same as
@@ -7,7 +8,8 @@ module MyApp
   # more sense.
   class Application < ::Yacl::Simple
 
-    # This defines a MyApp::Application::Defaults class
+    # This defines a MyApp::Application::Defaults class. This class is also
+    # available via MyApp::Application.defaults
     defaults do
       default 'archive.uri'    , 'http://archive.example.com'
       default 'messaging.uri'  , 'kestrel://messaging1.example.com:2229/'
@@ -16,7 +18,8 @@ module MyApp
       default 'timelimit'      , '10'
     end
 
-    # This defines a MyApp::Application::Parser class
+    # This defines a MyApp::Application::Parser class. This class is also
+    # available via MyApp::Application.parser
     parser do
       banner "myapp [options]+"
       opt 'pipeline.dir', :long => 'pipeline-dir', :short => 'd', :description => "The pipeline directory we are using", :cast => :string
@@ -26,7 +29,8 @@ module MyApp
       opt 'debug'       , :long => 'debug',        :sortt => 'D', :description => "Turn on debugging", :cast => :boolean
     end
 
-    # This defines a MyApp::Application::Plan class
+    # This defines a MyApp::Application::Plan class. This class is also
+    # available via MyApp::Application.plan
     plan do
       try MyApp::Application.parser
       try Yacl::Loader::Env, :prefix => 'MY_APP'
@@ -40,8 +44,9 @@ module MyApp
       end
     end
 
-    # This defines a MyApp::Application::Runner class and
-    run do
+    # This is the method that will be run when it is executed on the
+    # commandline.
+    def run
       puts properties.map.inspect
     end
   end

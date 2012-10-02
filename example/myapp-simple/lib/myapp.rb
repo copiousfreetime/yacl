@@ -26,7 +26,7 @@ module MyApp
       opt 'config.dir'  , :long => 'config-dir',   :short => 'c', :description => "The directory to load configuration from", :cast => :string
       opt 'timelimit'   , :long => 'time-limit',   :short => 't', :description => "The amount of time to run for", :cast => :integer
       opt 'system'      , :long => 'system',       :short => 's', :description => "The system setting", :cast => :string
-      opt 'debug'       , :long => 'debug',        :sortt => 'D', :description => "Turn on debugging", :cast => :boolean
+      opt 'debug'       , :long => 'debug',        :short => 'D', :description => "Turn on debugging", :cast => :boolean
     end
 
     # This defines a MyApp::Application::Plan class. This class is also

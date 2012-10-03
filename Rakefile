@@ -180,11 +180,10 @@ This.gemspec['ruby'] = Gem::Specification.new do |spec|
   spec.add_dependency( 'trollop', '~> 1.16' )
 
   # The Development Dependencies
-  spec.add_development_dependency( 'rake'     , '~> 0.9.2.2')
-  spec.add_development_dependency( 'minitest' , '~> 3.3.0' )
-  spec.add_development_dependency( 'rdoc'     , '~> 3.12'   )
+  spec.add_development_dependency( 'rake'       , '~> 0.9.2.2')
+  spec.add_development_dependency( 'minitest'   , '~> 3.3.0' )
+  spec.add_development_dependency( 'rdoc'       , '~> 3.12'   )
 end
-
 
 # The name of the gemspec file on disk
 This.gemspec_file = "#{This.name}.gemspec"

@@ -46,12 +46,12 @@ _eob_
 
 
   it "raises an error if the file does not exist" do
-    lambda { Yacl::Loader::YamlFile.new( :path => "/does/not/exist" ).properties }.must_raise Yacl::Loader::YamlFile::Error
+    lambda { Yacl::Loader::YamlFile.new( :path => "/does/not/exist" ).properties }.must_raise Yacl::Loader::LoadableFile::Error
   end
 
   it "raises an error if the file is not readable" do
     File.chmod( 0000, @yaml_file )
-    lambda { Yacl::Loader::YamlFile.new( :path => @yaml_file ).properties }.must_raise Yacl::Loader::YamlFile::Error
+    lambda { Yacl::Loader::YamlFile.new( :path => @yaml_file ).properties }.must_raise Yacl::Loader::LoadableFile::Error
     File.chmod( 0400, @yaml_file )
   end
 
@@ -74,7 +74,7 @@ _eob_
   end
 
   it "raises an error if the scoped config does not contain the scoped key" do
-    lambda { Yacl::Loader::YamlFile.new( :path => @scoped_file, :scope => "badscope" ).properties }.must_raise Yacl::Loader::YamlFile::Error
+    lambda { Yacl::Loader::YamlFile.new( :path => @scoped_file, :scope => "badscope" ).properties }.must_raise Yacl::Loader::LoadableFile::Error
   end
 
 end

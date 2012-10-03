@@ -178,7 +178,6 @@ This.gemspec['ruby'] = Gem::Specification.new do |spec|
   # The Runtime Dependencies
   spec.add_dependency( 'map', '~> 6.2.0')
   spec.add_dependency( 'trollop', '~> 1.16' )
-  spec.add_dependency( 'xml-simple' , '~> 1.0'   )
 
   # The Development Dependencies
   spec.add_development_dependency( 'rake'       , '~> 0.9.2.2')

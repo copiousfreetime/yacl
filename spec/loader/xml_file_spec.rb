@@ -42,8 +42,8 @@ class Yacl::Loader
       lambda { XmlFile.new( :path => make_file("<bad>") ).properties }.must_raise XmlFile::Error
     end
 
-    it "raises an error if the body contains super badly formed xml" do
-      lambda { XmlFile.new( :path => make_file("realBad>") ).properties }.must_raise XmlFile::Error
+    it "raises an error if the body is not xml at all" do
+      lambda { XmlFile.new( :path => make_file("This is not xml") ).properties }.must_raise XmlFile::Error
     end
 
     it "returns a scoped config returning properties" do
@@ -68,9 +68,26 @@ class Yacl::Loader
       xml_file.properties.thing.must_equal "stuff"
     end
 
+    it "returns an empty properties if there are no items in the xml file" do
+      xml = make_file("<config />")
+      xml_file = XmlFile.new( :path => xml )
+      xml_file.properties.length.must_equal 0
+    end
+
+    it "raises an error if the scope is not preesent in an empty xml file" do
+      xml = make_file("<config />")
+      xml_file = XmlFile.new( :path => xml, :scope => "staging" )
+      lambda { xml_file.properties }.must_raise XmlFile::Error
+    end
+
     it "raises an error if the scope is not present" do
-      xml = make_file("<config></config>")
-      xml_file = XmlFile.new(:path => make_file(xml), :scope => "development")
+      scoped_xml = "<config>
+        <development>
+          <thing>stuff</thing>
+        </development>
+      </config>"
+
+      xml_file = XmlFile.new(:path => make_file(scoped_xml), :scope => "staging")
 
       lambda { xml_file.properties }.must_raise XmlFile::Error
     end

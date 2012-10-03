@@ -1,32 +1,20 @@
-require 'xmlsimple'
+require 'rexml/document'
 require 'pathname'
 
 class Yacl::Loader
   class XmlFile < ::Yacl::Loader
     class Error < ::Yacl::Loader::Error; end
 
-    class CasedString
-      def initialize(string)
-        @string = string
-      end
-
-      def underscore
-        @string.gsub(/(.)([A-Z])/, '\1_\2').downcase
-      end
-
-      def camelize
-        @string.gsub(/_[a-z]/) { |m| m[-1..-1].upcase }
-      end
-    end
-
     def properties
       validate_file
 
       properties = Yacl::Properties.new
 
-      scoped_attributes.each do |key, values|
-        underscored_key = CasedString.new(key).underscore
-        properties[underscored_key] = values.first
+      scoped_attributes.each do |element|
+        key   = underscore(element.name)
+        value = element.texts.join
+
+        properties.set( key, value )
       end
 
       properties
@@ -35,21 +23,20 @@ class Yacl::Loader
     private
 
     def scoped_attributes
-      return raw_attributes if @options[:scope].nil?
+      root = document.root
+      raise Error, "Not a valid XmlFile" unless root
+      return root.elements if @options[:scope].nil?
 
-      camelized_scope = CasedString.new(@options[:scope]).camelize
-      scoped_attributes = raw_attributes[camelized_scope]
+      camelized_scope = camelize(@options[:scope])
 
-      if scoped_attributes.nil?
-        raise Error, "'#{@options[:scope]}' scope does not exist"
-      else
-        scoped_attributes.first
-      end
+      scoped_element = root.elements[ camelized_scope ]
+      raise Error, "'#{@options[:scope]}' scope does not exist" unless scoped_element
+      return scoped_element.elements
     end
 
-    def raw_attributes
-      XmlSimple.xml_in(path.read)
-    rescue REXML::ParseException, ArgumentError
+    def document
+      REXML::Document.new( path.read )
+    rescue REXML::ParseException
       raise Error.new(REXML::ParseException)
     end
 
@@ -61,6 +48,14 @@ class Yacl::Loader
     def path
       raise Error, "A path must be provided" unless @options[:path]
       Pathname.new(@options[:path])
+    end
+
+    def underscore( s )
+      s.gsub(/(.)([A-Z])/, '\1_\2').downcase
+    end
+
+    def camelize( s )
+      s.gsub(/_[a-z]/) { |m| m[-1..-1].upcase }
     end
   end
 end

@@ -4,16 +4,27 @@ require 'pathname'
 class Yacl::Loader
   class XmlFile < ::Yacl::Loader
     class Error < ::Yacl::Loader::Error; end
+    include ::Yacl::Loader::LoadableFile
+    def initialize( options = {} )
+      super
+      @path      = XmlFile.extract_path( options )
+      @scope     = options.fetch( :scope, nil )
+      @parameter = XmlFile.mapify_key( options[:parameter] )
+
+      if (not @path) and (reference_properties and @parameter) then
+        @path = Pathname.new( reference_properties.get( *@parameter ) )
+      end
+
+      validate_file( @path )
+    end
 
     def properties
-      load_properties( path, @options[:scope] )
+      validate_and_load_properties( @path, @scope )
     end
 
     private
 
     def load_properties( path, scope )
-      validate_file( path )
-
       properties = Yacl::Properties.new
 
       elements( path, scope ).each do |element|
@@ -47,16 +58,6 @@ class Yacl::Loader
       return root
     rescue REXML::ParseException
       raise Error.new(REXML::ParseException)
-    end
-
-    def validate_file( path )
-      raise Error, "#{path} does not exists" unless path.exist?
-      raise Error, "#{path} is not readable" unless path.readable?
-    end
-
-    def path
-      raise Error, "A path must be provided" unless @options[:path]
-      Pathname.new(@options[:path])
     end
 
     def underscore( s )

@@ -23,19 +23,22 @@ class Yacl::Loader
       xml_file.properties.da_bears.must_equal "Stuff"
     end
 
-    it "raises an error if no path or a nil path is given" do
-      lambda { XmlFile.new( {} ).properties }.must_raise XmlFile::Error
-      lambda { XmlFile.new( { :path => nil } ).properties }.must_raise XmlFile::Error
+    it "raises an error if an empty path is given" do
+      lambda { XmlFile.new( ).properties }.must_raise LoadableFile::Error
+    end
+
+    it "raises and error if a nil path is given" do
+      lambda { XmlFile.new( { :path => nil } ).properties }.must_raise LoadableFile::Error
     end
 
     it "raises an error if the file does not exist" do
-      lambda { XmlFile.new( :path => "/does/not/exist" ).properties }.must_raise XmlFile::Error
+      lambda { XmlFile.new( :path => "/does/not/exist" ).properties }.must_raise LoadableFile::Error
     end
 
     it "raises an error if the file is not readable" do
       path = make_file
       File.chmod(000, path)
-      lambda { XmlFile.new( :path => path ).properties }.must_raise XmlFile::Error
+      lambda { XmlFile.new( :path => path ).properties }.must_raise LoadableFile::Error
     end
 
     it "raises an error if the file is not well formed xml" do

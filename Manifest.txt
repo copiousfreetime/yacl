@@ -1,3 +1,4 @@
+CONTRIBUTING.md
 HISTORY.rdoc
 LICENSE
 Manifest.txt
@@ -6,12 +7,14 @@ Rakefile
 example/myapp-simple/bin/myapp
 example/myapp-simple/config/database.yml
 example/myapp-simple/config/host.yml
+example/myapp-simple/config/memcache.yml
 example/myapp-simple/config/pipeline.yml
 example/myapp-simple/lib/myapp.rb
 example/myapp/bin/myapp
 example/myapp/bin/myapp-job
 example/myapp/config/database.yml
 example/myapp/config/httpserver.yml
+example/myapp/config/memcache.yml
 example/myapp/config/pipeline.yml
 example/myapp/lib/myapp.rb
 example/myapp/lib/myapp/cli.rb
@@ -27,6 +30,8 @@ lib/yacl/define/defaults.rb
 lib/yacl/define/plan.rb
 lib/yacl/loader.rb
 lib/yacl/loader/env.rb
+lib/yacl/loader/loadable_file.rb
+lib/yacl/loader/xml_file.rb
 lib/yacl/loader/yaml_dir.rb
 lib/yacl/loader/yaml_file.rb
 lib/yacl/properties.rb
@@ -39,6 +44,7 @@ spec/define/cli/runner_spec.rb
 spec/define/defaults_spec.rb
 spec/define/plan_spec.rb
 spec/loader/env_spec.rb
+spec/loader/xml_file_spec.rb
 spec/loader/yaml_dir_spec.rb
 spec/loader/yaml_file_spec.rb
 spec/loader_spec.rb

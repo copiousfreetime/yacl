@@ -70,7 +70,7 @@ describe Yacl::Simple do
   end
 
   it "can define a full plan" do
-    config_dir = File.join( Yacl::Spec::Helpers.proj_root, 'example/myapp-simple/myapp/config' ) 
+    config_dir = File.join( Yacl::Spec::Helpers.proj_root, 'example/myapp-simple/config' )
     argv = [ '--config' , config_dir , '--log-level', 'info' ]
     simple = Yacl::Spec::Simple.go( argv )
     simple.host.port.must_equal 4321

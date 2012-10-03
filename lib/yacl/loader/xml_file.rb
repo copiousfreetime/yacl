@@ -2,7 +2,7 @@ require 'xmlsimple'
 require 'pathname'
 
 class Yacl::Loader
-  class XmlFile
+  class XmlFile < ::Yacl::Loader
     class Error < ::Yacl::Loader::Error; end
 
     class CasedString
@@ -17,10 +17,6 @@ class Yacl::Loader
       def camelize
         @string.gsub(/_[a-z]/) { |m| m[-1..-1].upcase }
       end
-    end
-
-    def initialize(options = options)
-      @options = options
     end
 
     def properties

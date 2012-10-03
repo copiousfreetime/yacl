@@ -1,6 +1,21 @@
 class Yacl::Loader
-  module LoadableFile
+  class LoadableFile < ::Yacl::Loader
     class Error < ::Yacl::Loader::Error; end
+
+    def initialize( options = {} )
+      super
+      @path      = self.class.extract_path( options )
+      @scope     = options.fetch( :scope, nil )
+      @parameter = self.class.mapify_key( options[:parameter] )
+
+      if (not @path) and (reference_properties and @parameter) then
+        @path = Pathname.new( reference_properties.get( *@parameter ) )
+      end
+
+      validate_file( @path )
+    end
+
+
     # Internal: load a Properties from the given filename.
     #
     # filename - The name of the yaml file to load

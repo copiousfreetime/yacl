@@ -2,21 +2,8 @@ require 'rexml/document'
 require 'pathname'
 
 class Yacl::Loader
-  class XmlFile < ::Yacl::Loader
+  class XmlFile < ::Yacl::Loader::LoadableFile
     class Error < ::Yacl::Loader::Error; end
-    include ::Yacl::Loader::LoadableFile
-    def initialize( options = {} )
-      super
-      @path      = XmlFile.extract_path( options )
-      @scope     = options.fetch( :scope, nil )
-      @parameter = XmlFile.mapify_key( options[:parameter] )
-
-      if (not @path) and (reference_properties and @parameter) then
-        @path = Pathname.new( reference_properties.get( *@parameter ) )
-      end
-
-      validate_file( @path )
-    end
 
     def properties
       validate_and_load_properties( @path, @scope )

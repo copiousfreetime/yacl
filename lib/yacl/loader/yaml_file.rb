@@ -19,22 +19,8 @@ class Yacl::Loader
   #   props = yd.properties
   #   props.adapter # => postgre
   #
-  class YamlFile < ::Yacl::Loader
+  class YamlFile < ::Yacl::Loader::LoadableFile
     class Error < ::Yacl::Loader::Error; end
-    include ::Yacl::Loader::LoadableFile
-
-    def initialize( opts = {} )
-      super
-      @path      = YamlFile.extract_path( options )
-      @scope     = options.fetch( :scope, nil )
-      @parameter = YamlFile.mapify_key( options[:parameter] )
-
-      if (not @path) and (reference_properties and @parameter) then
-        @path = Pathname.new( reference_properties.get( *@parameter ) )
-      end
-
-      validate_file( @path )
-    end
 
     def properties
       validate_and_load_properties( @path, @scope )

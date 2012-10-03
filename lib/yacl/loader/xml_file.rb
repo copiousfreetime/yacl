@@ -6,11 +6,17 @@ class Yacl::Loader
     class Error < ::Yacl::Loader::Error; end
 
     def properties
-      validate_file
+      load_properties( path, @options[:scope] )
+    end
+
+    private
+
+    def load_properties( path, scope )
+      validate_file( path )
 
       properties = Yacl::Properties.new
 
-      scoped_attributes.each do |element|
+      elements( path, scope ).each do |element|
         key   = underscore(element.name)
         value = element.texts.join
 
@@ -20,27 +26,30 @@ class Yacl::Loader
       properties
     end
 
-    private
-
-    def scoped_attributes
-      root = document.root
-      raise Error, "Not a valid XmlFile" unless root
-      return root.elements if @options[:scope].nil?
-
-      camelized_scope = camelize(@options[:scope])
-
-      scoped_element = root.elements[ camelized_scope ]
-      raise Error, "'#{@options[:scope]}' scope does not exist" unless scoped_element
-      return scoped_element.elements
+    def elements( path, scope )
+      root = root_element( path )
+      if scope.nil? then
+        root.elements
+      else
+        scoped_elements( root, scope )
+      end
     end
 
-    def document
-      REXML::Document.new( path.read )
+    def scoped_elements( root, scope )
+      scoped_element = root.elements[ camelize( scope ) ]
+      raise Error, "'#{scope}' scope does not exist" unless scoped_element
+      scoped_element.elements
+    end
+
+    def root_element( path )
+      root = REXML::Document.new( path.read ).root
+      raise Error, "Not a valid XmlFile" unless root
+      return root
     rescue REXML::ParseException
       raise Error.new(REXML::ParseException)
     end
 
-    def validate_file
+    def validate_file( path )
       raise Error, "#{path} does not exists" unless path.exist?
       raise Error, "#{path} is not readable" unless path.readable?
     end

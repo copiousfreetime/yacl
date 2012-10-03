@@ -78,3 +78,4 @@ end
 require 'yacl/loader/env'
 require 'yacl/loader/yaml_file'
 require 'yacl/loader/yaml_dir'
+require 'yacl/loader/xml_file'

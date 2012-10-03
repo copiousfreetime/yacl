@@ -35,7 +35,8 @@ easiest way to contribute.
 
 # Contributors
 
-* Jeremy Hinegardner
+* Jeremy Hinegardner - [@copiousfreetime](http://twitter.com/copiousfreetime)
+* Rafer Hazen - [@raferh](http://twitter.com/raferh)
 
 [GitHub Account]: https://github.com/signup/free "GitHub Signup"
 [GitHub Issues]:  https://github.com/copiousfreetime/yacl/issues "Yacl Issues"
